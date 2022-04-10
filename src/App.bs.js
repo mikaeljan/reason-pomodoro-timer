@@ -4,13 +4,18 @@ var Curry = require("bs-platform/lib/js/curry.js");
 var React = require("react");
 var State$MyReactApp = require("./State.bs.js");
 var Timer$MyReactApp = require("./Timer.bs.js");
+var Header$MyReactApp = require("./Header.bs.js");
 var EditTime$MyReactApp = require("./EditTime.bs.js");
 var TimerActions$MyReactApp = require("./TimerActions.bs.js");
 
 function App(Props) {
   var match = React.useReducer(State$MyReactApp.reducer, State$MyReactApp.initialState);
-  var dispatch = match[1];
   var state = match[0];
+  var currentPhase = state.currentPhase;
+  var playTime = state.playTime;
+  var workTime = state.workTime;
+  var seconds = state.seconds;
+  var dispatch = match[1];
   React.useEffect((function () {
           var timer = setInterval((function (param) {
                   return Curry._1(dispatch, /* Tick */3);
@@ -22,18 +27,19 @@ function App(Props) {
         }), []);
   return React.createElement("div", {
               className: "container"
-            }, React.createElement(Timer$MyReactApp.make, {
-                  seconds: state.seconds
-                }), React.createElement("button", {
-                  onClick: (function (param) {
-                      return Curry._1(dispatch, /* TogglePhase */4);
-                    })
-                }, "Switch Timer"), React.createElement("div", undefined, String(state.seconds)), React.createElement(TimerActions$MyReactApp.make, {
+            }, React.createElement(Header$MyReactApp.make, {
+                  seconds: seconds,
+                  currentPhase: currentPhase,
+                  dispatch: dispatch
+                }), React.createElement(Timer$MyReactApp.make, {
+                  seconds: seconds,
+                  maxTime: currentPhase ? Math.imul(playTime, 60) : Math.imul(workTime, 60)
+                }), React.createElement(TimerActions$MyReactApp.make, {
                   dispatch: dispatch,
                   isTicking: state.isTicking
                 }), React.createElement(EditTime$MyReactApp.make, {
                   phase: "Work",
-                  value: state.workTime,
+                  value: workTime,
                   onChange: (function (e) {
                       return Curry._1(dispatch, /* SetTime */{
                                   _0: /* Work */0,
@@ -42,7 +48,7 @@ function App(Props) {
                     })
                 }), React.createElement(EditTime$MyReactApp.make, {
                   phase: "Break",
-                  value: state.playTime,
+                  value: playTime,
                   onChange: (function (e) {
                       return Curry._1(dispatch, /* SetTime */{
                                   _0: /* Play */1,

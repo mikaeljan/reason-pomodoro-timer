@@ -95,7 +95,7 @@ function reducer(state, action) {
 }
 
 var initialState = {
-  seconds: 30,
+  seconds: 0,
   isTicking: false,
   workTime: 25,
   playTime: 5,

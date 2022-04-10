@@ -1,8 +1,8 @@
 open Utils;
 [@react.component]
 let make = (~phase, ~value, ~onChange) =>
-  <div>
-    <label> {s(phase)} </label>
+  <div className="edit-time">
+    <label className="edit-time-label"> {s(phase)} </label>
     <input
       type_="number"
       value={string_of_int(value)}
